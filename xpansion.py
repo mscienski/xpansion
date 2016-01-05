@@ -61,20 +61,21 @@ def choose_random_entry(entries):
 
 def app(environ, start_response):
       metadata = get_article_meta('asp')
+      random_entry = ''
       if has_articles(metadata):
           titles = get_titles(metadata)
           articles = get_articles(titles)
           entries = get_entries(articles)
           random_entry = choose_random_entry(entries)
 
-      if random_entry:
-          random_entry = unicode(random_entry)
+      random_entry = unicode(random_entry)
+
       start_response("200 OK", [
           ("Content-Type", "text/html;charset=utf-8"),
-          ("Content-Length", str(len(random_entry)) or 0)
+          ("Content-Length", len(random_entry))
       ])
 
-      return iter([random_entry]) or None
+      return iter([random_entry])
 
 def test_func():
     metadata = get_article_meta('asp')
