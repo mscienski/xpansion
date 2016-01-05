@@ -52,9 +52,10 @@ def get_entries(html_docs):
         html = lxml.html.document_fromstring(doc)
         list_items = html.cssselect('#mw-content-text > ul li')
 
-        for item in list_items:
-            formatted_item = item.text_content()
-            formatted_entries.append(formatted_item)
+        if len(list_items):
+            for item in list_items:
+                formatted_item = item.text_content()
+                formatted_entries.append(formatted_item)
 
     return formatted_entries
 
@@ -74,7 +75,8 @@ def app(environ, start_response):
                 titles = get_titles(metadata)
                 articles = get_articles(titles)
                 entries = get_entries(articles)
-                random_entry = choose_random_entry(entries)
+                if len(entries):
+                    random_entry = choose_random_entry(entries)
 
             start_response('200 OK', [
               ('Content-Type', 'application/json')
