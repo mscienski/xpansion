@@ -68,12 +68,13 @@ def app(environ, start_response):
         if query_text:
             query_text = escape(query_text)
             metadata = get_article_meta(query_text)
+            random_entry = None
             out_text = 'No expansion found for ' + query_text
             if has_articles(metadata):
-              titles = get_titles(metadata)
-              articles = get_articles(titles)
-              entries = get_entries(articles)
-              random_entry = choose_random_entry(entries)
+                titles = get_titles(metadata)
+                articles = get_articles(titles)
+                entries = get_entries(articles)
+                random_entry = choose_random_entry(entries)
 
             start_response('200 OK', [
               ('Content-Type', 'application/json')
