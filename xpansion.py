@@ -26,7 +26,9 @@ def get_article_meta(term):
 
 
 def has_articles(json):
-    return 'query' in json and 'pages' in json['query'] and not '-1' in json['query']['pages']
+    missing_no = len([miss for miss in json['query']['pages'] if miss == '-1')
+    total = len([tot for tot in json['query']['pages']])
+    return 'query' in json and 'pages' in json['query'] and not total == missing_no
 
 
 def get_titles(json):
