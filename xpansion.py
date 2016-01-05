@@ -27,7 +27,7 @@ def get_article_meta(term):
 
 def has_articles(payload):
     if 'query' in payload and 'pages' in payload['query']:
-        missing_no = len([miss for miss in dict(payload['query']['pages']) if miss == '-1')
+        missing_no = len([miss for miss in dict(payload['query']['pages']) if miss == '-1'])
         total = len([tot for tot in dict(payload['query']['pages'])])
         
         return total != missing_no
