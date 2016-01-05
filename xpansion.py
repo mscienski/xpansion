@@ -60,26 +60,25 @@ def choose_random_entry(entries):
     return random.choice(entries)
 
 def app(environ, start_response):
-      metadata = get_article_meta('asp')
-      random_entry = ''
-      if has_articles(metadata):
+    if environ['QUERY_STRING'] and environ['QUERY_STRING']['text']:
+        query_text = environ['QUERY_STRING']['text']
+        metadata = get_article_meta(query_text)
+        random_entry = ''
+        if has_articles(metadata):
           titles = get_titles(metadata)
           articles = get_articles(titles)
           entries = get_entries(articles)
           random_entry = choose_random_entry(entries)
 
-      start_response("200 OK", [
-          ("Content-Type", "text/html;charset=utf8")
-      ])
+        start_response("200 OK", [
+          ("Content-Type", "application/json")
+        ])
 
-      return iter(environ['QUERY_STRING'])
+        response = dict({
+            'response_type': 'in_channel',
+            'text': query_text + ' is a possible acronym/initialism for: ' + random_entry
+        })
 
-def test_func():
-    metadata = get_article_meta('asp')
-    if has_articles(metadata):
-        titles = get_titles(metadata)
-        articles = get_articles(titles)
-        entries = get_entries(articles)
-        random_entry = choose_random_entry(entries)
+        return iter(environ['QUERY_STRING'])
 
-    print random_entry or None
+    return None
