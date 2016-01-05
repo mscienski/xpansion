@@ -68,30 +68,29 @@ def app(environ, start_response):
         if query_text:
             query_text = escape(query_text)
             metadata = get_article_meta(query_text)
-            text = "I couldn't find an expansion for + " query_text
+            out_text = 'No expansion found for ' + query_text
             if has_articles(metadata):
               titles = get_titles(metadata)
               articles = get_articles(titles)
               entries = get_entries(articles)
               random_entry = choose_random_entry(entries)
 
-            start_response("200 OK", [
-              ("Content-Type", "application/json")
+            start_response('200 OK', [
+              ('Content-Type', 'application/json')
             ])
 
             if random_entry:
-                text = query_text + ' could mean: ' + random_entry
-
+                out_text = query_text + ' could mean: ' + random_entry
 
             response = dict({
                 'response_type': 'in_channel',
-                'text': text
+                'text': out_text
             })
 
             return json.dumps(response)
 
-    start_response('500 Internal Server Error', [
-        ("Content-Type", "application/json")
+    start_response('412 Precondition Failed', [
+        ('Content-Type', 'application/json')
     ])
 
-    return iter([])
+    return iter(['Need a text= query parameter'])
