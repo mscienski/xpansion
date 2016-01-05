@@ -1,6 +1,7 @@
 import requests
 import lxml.html
 import random
+from cgi import parse_qs, escape
 
 WIKIARTICLEURI = 'http://en.wikipedia.org/wiki/'
 WIKIAPIURI = 'http://en.wikipedia.org/w/api.php'
@@ -61,9 +62,10 @@ def choose_random_entry(entries):
 
 def app(environ, start_response):
     if environ['QUERY_STRING']:
-        '''
-        query_text = dict(environ['QUERY_STRING'])['text']
+        d = parse_qs(environ['QUERY_STRING'])
+        query_text = d.get('text', [''])[0]
         if query_text:
+            query_text = escape(query_text)
             metadata = get_article_meta(query_text)
             random_entry = ''
             if has_articles(metadata):
@@ -82,7 +84,4 @@ def app(environ, start_response):
             })
 
             return iter(response)
-        '''
-
-        return dict(environ['QUERY_STRING'])
     return iter([])
