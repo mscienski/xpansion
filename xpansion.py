@@ -25,21 +25,21 @@ def get_article_meta(term):
     return resp.json()
 
 
-def has_articles(json):
-    if 'query' in json and 'pages' in json['query']:
-        missing_no = len([miss for miss in json['query']['pages'].keys() if miss == '-1')
-        total = len([tot for tot in json['query']['pages'].keys()])
+def has_articles(payload):
+    if 'query' in payload and 'pages' in payload['query']:
+        missing_no = len([miss for miss in dict(payload['query']['pages']) if miss == '-1')
+        total = len([tot for tot in dict(payload['query']['pages'])])
         
         return total != missing_no
     
     return False
 
 
-def get_titles(json):
+def get_titles(payload):
     titles = []
-    id_keys = [key for key in dict(json['query']['pages'])]
+    id_keys = [key for key in dict(payload['query']['pages'])]
     for key in id_keys:
-        titles.append(json['query']['pages'][key]['title'])
+        titles.append(payload['query']['pages'][key]['title'])
 
     return titles
 
