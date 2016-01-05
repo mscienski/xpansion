@@ -60,8 +60,8 @@ def choose_random_entry(entries):
     return random.choice(entries)
 
 def app(environ, start_response):
-    if environ['QUERY_STRING'] and environ['QUERY_STRING']['text']:
-        query_text = environ['QUERY_STRING']['text']
+    if environ['QUERY_STRING']:
+        query_text = [text for text in dict(environ['QUERY_STRING']) where dict(environ['QUERY_STRING']).keys() == 'text']
         metadata = get_article_meta(query_text)
         random_entry = ''
         if has_articles(metadata):
@@ -81,4 +81,4 @@ def app(environ, start_response):
 
         return iter(environ['QUERY_STRING'])
 
-    return None
+    return iter([])
