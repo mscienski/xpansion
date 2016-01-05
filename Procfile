@@ -1,1 +1,1 @@
-web: python xpansion.py
+web: gunicorn xpansion:app --log-file
