@@ -1,6 +1,7 @@
 import requests
 import lxml.html
 import random
+import json
 from cgi import parse_qs, escape
 
 WIKIARTICLEURI = 'http://en.wikipedia.org/wiki/'
@@ -83,5 +84,10 @@ def app(environ, start_response):
                 'text': query_text + ' is a possible acronym/initialism for: ' + random_entry
             })
 
-            return iter(response)
+            return json.dumps(response)
+
+    start_response('500 Internal Server Error', [
+        ("Content-Type", "application/json")
+    ])
+
     return iter([])
