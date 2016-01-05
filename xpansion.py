@@ -61,24 +61,25 @@ def choose_random_entry(entries):
 
 def app(environ, start_response):
     if environ['QUERY_STRING']:
-        query_text = [text for text in dict(environ['QUERY_STRING']) where dict(environ['QUERY_STRING']).keys() == 'text']
-        metadata = get_article_meta(query_text)
-        random_entry = ''
-        if has_articles(metadata):
-          titles = get_titles(metadata)
-          articles = get_articles(titles)
-          entries = get_entries(articles)
-          random_entry = choose_random_entry(entries)
+        query_text = dict(environ['QUERY_STRING'])['text']
+        if query_text:
+            metadata = get_article_meta(query_text)
+            random_entry = ''
+            if has_articles(metadata):
+              titles = get_titles(metadata)
+              articles = get_articles(titles)
+              entries = get_entries(articles)
+              random_entry = choose_random_entry(entries)
 
-        start_response("200 OK", [
-          ("Content-Type", "application/json")
-        ])
+            start_response("200 OK", [
+              ("Content-Type", "application/json")
+            ])
 
-        response = dict({
-            'response_type': 'in_channel',
-            'text': query_text + ' is a possible acronym/initialism for: ' + random_entry
-        })
+            response = dict({
+                'response_type': 'in_channel',
+                'text': query_text + ' is a possible acronym/initialism for: ' + random_entry
+            })
 
-        return iter(environ['QUERY_STRING'])
+            return iter(response)
 
     return iter([])
