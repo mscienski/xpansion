@@ -93,7 +93,7 @@ def app(environ, start_response):
             return json.dumps(response)
 
     start_response('412 Precondition Failed', [
-        ('Content-Type', 'application/json')
+        ('Content-Type', 'text/plain')
     ])
 
     return iter(['Need a text= query parameter'])
