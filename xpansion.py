@@ -67,8 +67,10 @@ def app(environ, start_response):
           entries = get_entries(articles)
           random_entry = choose_random_entry(entries)
 
+      if random_entry:
+          random_entry = unicode(random_entry)
       start_response("200 OK", [
-          ("Content-Type", "text/plain"),
+          ("Content-Type", "text/html;charset=utf-8"),
           ("Content-Length", str(len(random_entry)) or 0)
       ])
 
