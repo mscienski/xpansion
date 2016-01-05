@@ -60,12 +60,6 @@ def choose_random_entry(entries):
     return random.choice(entries)
 
 def app(environ, start_response):
-      data = "Hello, World!\n"
-      start_response("200 OK", [
-          ("Content-Type", "text/plain"),
-          ("Content-Length", str(len(data)))
-      ])
-
       metadata = get_article_meta('asp')
       if has_articles(metadata):
           titles = get_titles(metadata)
@@ -73,12 +67,19 @@ def app(environ, start_response):
           entries = get_entries(articles)
           random_entry = choose_random_entry(entries)
 
+      start_response("200 OK", [
+          ("Content-Type", "text/plain"),
+          ("Content-Length", str(len(random_entry)) or 0)
+      ])
+
       return iter([random_entry]) or None
 
-stuff = get_article_meta('asp')
-title = get_title(stuff)
+def test_func():
+    metadata = get_article_meta('asp')
+    if has_articles(metadata):
+        titles = get_titles(metadata)
+        articles = get_articles(titles)
+        entries = get_entries(articles)
+        random_entry = choose_random_entry(entries)
 
-article =  get_articles(title)
-entries = get_entries(article)
-
-print choose_random_entry(entries)
+    print random_entry or None
