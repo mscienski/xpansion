@@ -72,7 +72,7 @@ def app(environ, start_response):
           ("Content-Type", "text/html;charset=utf8")
       ])
 
-      return iter(environ)
+      return iter(environ['QUERY_STRING'])
 
 def test_func():
     metadata = get_article_meta('asp')
