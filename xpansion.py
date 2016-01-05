@@ -11,7 +11,7 @@ def get_article_meta(term):
     payload = {
         'action': 'query',
         'format': 'json',
-        'titles': term.lower() + '|' + term.upper()
+        'titles': term.lower() + '_(disambiguation)' + '|' + term.upper() + '_(disambiguation)'
     }
 
     headers = {
