@@ -68,7 +68,7 @@ def app(environ, start_response):
         if query_text:
             query_text = escape(query_text)
             metadata = get_article_meta(query_text)
-            random_entry = ''
+            text = "I couldn't find an expansion for + " query_text
             if has_articles(metadata):
               titles = get_titles(metadata)
               articles = get_articles(titles)
@@ -79,9 +79,13 @@ def app(environ, start_response):
               ("Content-Type", "application/json")
             ])
 
+            if random_entry:
+                text = query_text + ' could mean: ' + random_entry
+
+
             response = dict({
                 'response_type': 'in_channel',
-                'text': query_text + ' is a possible acronym/initialism for: ' + random_entry
+                'text': text
             })
 
             return json.dumps(response)
